@@ -1,5 +1,10 @@
 import { fakerKO } from '@faker-js/faker';
-import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  HttpStatus,
+  INestApplication,
+  NotFoundException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as fs from 'fs';
@@ -10,10 +15,12 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/service/user.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostModule } from './post.module';
+import { PostService } from './post.service';
 describe('Post e2e', () => {
   let app: INestApplication;
   let userService: UserService;
   let authService: AuthService;
+  let postService: PostService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -38,6 +45,7 @@ describe('Post e2e', () => {
     app = module.createNestApplication();
     userService = app.get<UserService>(UserService);
     authService = app.get<AuthService>(AuthService);
+    postService = app.get<PostService>(PostService);
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -123,5 +131,8 @@ describe('Post e2e', () => {
         expect(body.createdAt).toEqual(expect.any(String));
         expect(body.updatedAt).toEqual(expect.any(String));
       });
+  });
+  it('없는 게시글 조회', async () => {
+    await expect(postService.findOne(1)).rejects.toThrow(NotFoundException);
   });
 });

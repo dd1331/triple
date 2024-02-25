@@ -34,7 +34,7 @@ export class PostService {
   }
 
   async findOne(postId: number) {
-    const post = this.postRepo
+    const post = await this.postRepo
       .createQueryBuilder('post')
       .select('post.postId', 'postId')
       .addSelect('post.title', 'title')
