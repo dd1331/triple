@@ -1,1 +1,1 @@
-export const POST_REPOSITORY = 'PostRepository';
+export const POST_REPOSITORY = 'IPostRepository';
