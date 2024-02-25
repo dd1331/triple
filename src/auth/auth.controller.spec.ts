@@ -5,10 +5,12 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import * as request from 'supertest';
 import { UserService } from '../user/service/user.service';
 import { AuthModule } from './auth.module';
+import { AuthService } from './auth.service';
 
 describe('Auth e2e', () => {
   let app: INestApplication;
   let userService: UserService;
+  let authService: AuthService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -30,7 +32,7 @@ describe('Auth e2e', () => {
 
     userService = module.get<UserService>(UserService);
 
-    userService = module.get<UserService>(UserService);
+    authService = module.get<AuthService>(AuthService);
 
     app = module.createNestApplication();
     await app.init();
@@ -41,6 +43,21 @@ describe('Auth e2e', () => {
     return request(app.getHttpServer())
       .get('/auth/guarded')
       .expect(HttpStatus.UNAUTHORIZED);
+  });
+  it('인가 성공', async () => {
+    const dto: CreateUserDto = {
+      identififer: 'test',
+      password: '1234',
+    };
+
+    const user = await userService.create(dto);
+
+    const { accessToken } = await authService.login(user);
+
+    return request(app.getHttpServer())
+      .get('/auth/guarded')
+      .set({ Authorization: `Bearer ${accessToken}` })
+      .expect(HttpStatus.OK);
   });
   it('로그인 성공', async () => {
     const dto: CreateUserDto = {
