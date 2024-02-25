@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UploadedFile,
@@ -32,14 +33,9 @@ export class PostController {
     return this.postService.create(userId, post, file);
   }
 
-  @Get()
-  findAll() {
-    return this.postService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.findOne(id);
   }
 
   @Patch(':id')

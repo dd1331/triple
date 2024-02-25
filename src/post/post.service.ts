@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { FILE_SERVICE } from '../file/file-constants';
 import { FileService } from '../file/file.service';
@@ -18,11 +18,13 @@ export class PostService {
   async create(posterId: number, dto: PostDto, file: Express.Multer.File) {
     const url = await this.fileService.upload(file);
 
-    const post = await this.postRepo.save({
+    const post = this.postRepo.create({
       ...dto,
       posterId,
       img: url,
     });
+
+    await this.postRepo.save(post);
 
     return post;
   }
@@ -31,8 +33,24 @@ export class PostService {
     return `This action returns all post`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(postId: number) {
+    const post = this.postRepo
+      .createQueryBuilder('post')
+      .select('post.postId', 'postId')
+      .addSelect('post.title', 'title')
+      .addSelect('post.content', 'content')
+      .addSelect('post.img', 'img')
+      .addSelect('post.createdAt', 'createdAt')
+      .addSelect('post.updatedAt', 'updatedAt')
+      .addSelect('poster.name', 'name')
+      .addSelect('post.posterId', 'posterId')
+      .innerJoin('post.poster', 'poster')
+      .where('post.postId =:postId', { postId })
+      .getRawOne();
+
+    if (!post) throw new NotFoundException('존재하지 않는 게시글입니다');
+
+    return post;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

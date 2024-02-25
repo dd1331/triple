@@ -6,6 +6,10 @@ export class CreateUserDto {
   identififer: string;
 
   @IsNotEmpty()
+  @Length(2, 15)
+  name: string;
+
+  @IsNotEmpty()
   @Length(6, 20)
   @IsString()
   // TODO: 형식 체크

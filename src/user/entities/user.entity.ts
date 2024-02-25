@@ -14,18 +14,22 @@ export class User extends GoodBaseEntity<User> {
   @Column({ length: 15, unique: true })
   identififer: string;
 
+  @Column({ length: 150 })
+  name: string;
+
   @Column({ length: 100 })
   private password: string;
 
   @OneToMany(() => Post, ({ poster }) => poster)
   posts: Post[];
 
-  async signup({ password, identififer }: CreateUserDto) {
+  async signup({ password, identififer, name }: CreateUserDto) {
     const hash = await bcrypt.hash(password, SALT_OR_ROUNDS);
 
     // TODO: 암호화해서 받기
     this.password = hash;
     this.identififer = identififer;
+    this.name = name;
   }
 
   async login({ password }: { password: string }) {

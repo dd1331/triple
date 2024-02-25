@@ -52,10 +52,11 @@ describe('Post e2e', () => {
     const dto: CreateUserDto = {
       identififer: fakerKO.string.alphanumeric(10),
       password: fakerKO.string.alphanumeric(10),
+      name: fakerKO.person.fullName(),
     };
     const user = await userService.create(dto);
 
-    const { accessToken } = await authService.login(user);
+    const { accessToken } = authService.login(user);
 
     const postDto: CreatePostDto = {
       post: {
@@ -73,6 +74,46 @@ describe('Post e2e', () => {
       .field('post', JSON.stringify(postDto))
       .attach('img', imageData, imageFilePath)
       .expect(HttpStatus.CREATED)
+      .expect(({ body }) => {
+        expect(body.postId).toEqual(expect.any(Number));
+        expect(body.title).toEqual(expect.any(String));
+        expect(body.content).toEqual(expect.any(String));
+        expect(body.img).toEqual(expect.any(String));
+        expect(body.posterId).toEqual(expect.any(Number));
+        expect(body.createdAt).toEqual(expect.any(String));
+        expect(body.updatedAt).toEqual(expect.any(String));
+      });
+  });
+
+  it('제목, 내용, 이미지, 작성자 정보, 작성일 등을 포함한 게시글 조회', async () => {
+    const dto: CreateUserDto = {
+      identififer: fakerKO.string.alphanumeric(10),
+      password: fakerKO.string.alphanumeric(10),
+      name: fakerKO.person.fullName(),
+    };
+    const user = await userService.create(dto);
+
+    const { accessToken } = authService.login(user);
+
+    const postDto: CreatePostDto = {
+      post: {
+        title: fakerKO.lorem.sentence(),
+        content: fakerKO.lorem.paragraphs(),
+      },
+    };
+
+    const imageFilePath = 'Untitled.png';
+    const imageData = fs.readFileSync(imageFilePath);
+
+    const { body } = await request(app.getHttpServer())
+      .post('/posts')
+      .set({ Authorization: `Bearer ${accessToken}` })
+      .field('post', JSON.stringify(postDto))
+      .attach('img', imageData, imageFilePath);
+
+    return request(app.getHttpServer())
+      .get('/posts/' + body.postId)
+      .expect(HttpStatus.OK)
       .expect(({ body }) => {
         expect(body.postId).toEqual(expect.any(Number));
         expect(body.title).toEqual(expect.any(String));
