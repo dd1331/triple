@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 
 import * as bcrypt from 'bcrypt';
 import { GoodBaseEntity } from '../../common/good-base.entity';
+import { Post } from '../../post/entities/post.entity';
 import { SALT_OR_ROUNDS } from '../user.constants';
 
 @Entity()
@@ -15,6 +16,9 @@ export class User extends GoodBaseEntity<User> {
 
   @Column({ length: 100 })
   private password: string;
+
+  @OneToMany(() => Post, ({ poster }) => poster)
+  posts: Post[];
 
   async signup({ password, identififer }: CreateUserDto) {
     const hash = await bcrypt.hash(password, SALT_OR_ROUNDS);
