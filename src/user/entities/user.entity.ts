@@ -23,4 +23,11 @@ export class User extends GoodBaseEntity<User> {
     this.password = hash;
     this.identififer = identififer;
   }
+
+  async login({ password }: { password: string }) {
+    const isValid = await bcrypt.compare(password, this.password);
+
+    if (!isValid) return null;
+    return this;
+  }
 }
