@@ -19,7 +19,7 @@ export class Post extends GoodBaseEntity<Post> {
   @Column({ type: 'longtext' })
   content: string;
 
-  @Column()
+  @Column({ nullable: true })
   img: string;
 
   @Column({ name: 'poster_id' })
@@ -28,4 +28,18 @@ export class Post extends GoodBaseEntity<Post> {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'poster_id' })
   poster: User;
+
+  update({
+    title,
+    content,
+    img,
+  }: {
+    title: string;
+    content: string;
+    img: string;
+  }) {
+    this.title = title;
+    this.content = content;
+    this.img = img;
+  }
 }
