@@ -26,12 +26,7 @@ describe('Post e2e', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        // TODO: 합치기
-        TypeOrmModule.forRoot(ormModuleOption),
-        AuthModule,
-        PostModule,
-      ],
+      imports: [TypeOrmModule.forRoot(ormModuleOption), AuthModule, PostModule],
     }).compile();
 
     app = module.createNestApplication();

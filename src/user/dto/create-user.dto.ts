@@ -12,6 +12,5 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Length(6, 20)
   @IsString()
-  // TODO: 형식 체크
   password: string;
 }

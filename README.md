@@ -1,3 +1,18 @@
+# 실행방법
+
+```
+# 환경 설정
+사용하지않거나 새로 생성한 데이터베이스(Mysql) 준비 (테스트/앱 모두 테이블 드랍싱크가 적용되어있어 기존 데이터 소실됨, 필요시 orm-module-option.ts에서 드랍싱크 해제 가능)
+
+orm-module-option.ts 파일에서 로컬 데이터베이스 정보 적용
+
+# 앱실행
+npm run start:dev
+
+# 테스트코드 실행
+npm run test:watch
+```
+
 # 특이사항
 
 ### FileService
