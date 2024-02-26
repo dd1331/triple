@@ -15,7 +15,6 @@ import { LocalStrategy } from './local.strategy';
     JwtModule.register({
       global: true,
       secret: JWT_SECRET,
-      // TODO: 확인
       signOptions: { expiresIn: '1d' },
     }),
   ],

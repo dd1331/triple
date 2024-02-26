@@ -1,8 +1,8 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import * as request from 'supertest';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/service/user.service';
 import { AuthModule } from './auth.module';
 import { AuthService } from './auth.service';
@@ -48,9 +48,10 @@ describe('Auth e2e', () => {
     const dto: CreateUserDto = {
       identififer: 'test',
       password: '1234',
+      name: 'test',
     };
 
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
 
     const { accessToken } = await authService.login(user);
 
@@ -63,14 +64,15 @@ describe('Auth e2e', () => {
     const dto: CreateUserDto = {
       identififer: 'test',
       password: '1234',
+      name: 'test',
     };
 
-    await userService.create(dto);
+    await userService.signup(dto);
 
     return request(app.getHttpServer())
       .post('/auth/login')
       .send({ identififer: 'test', password: '1234' })
-      .expect(HttpStatus.CREATED)
+      .expect(HttpStatus.OK)
       .expect((res) => {
         expect(res.body.accessToken).toEqual(expect.any(String));
       });
@@ -79,9 +81,10 @@ describe('Auth e2e', () => {
     const dto: CreateUserDto = {
       identififer: 'test',
       password: '1234',
+      name: 'test',
     };
 
-    await userService.create(dto);
+    await userService.signup(dto);
 
     return request(app.getHttpServer())
       .post('/auth/login')

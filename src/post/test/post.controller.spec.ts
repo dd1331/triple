@@ -14,8 +14,7 @@ import { AuthModule } from '../../auth/auth.module';
 import { AuthService } from '../../auth/auth.service';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
 import { UserService } from '../../user/service/user.service';
-import { CreatePostDto, PostDto } from '../dto/create-post.dto';
-import { UpdatePostDto } from '../dto/update-post.dto';
+import { PostDto } from '../dto/create-post.dto';
 import { PostModule } from '../post.module';
 import { PostService } from '../service/post.service';
 describe('Post e2e', () => {
@@ -64,15 +63,13 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
 
     const { accessToken } = authService.login(user);
 
-    const postDto: CreatePostDto = {
-      post: {
-        title: fakerKO.lorem.sentence(),
-        content: fakerKO.lorem.paragraphs(),
-      },
+    const postDto: PostDto = {
+      title: fakerKO.lorem.sentence(),
+      content: fakerKO.lorem.paragraphs(),
     };
 
     const imageFilePath = 'Untitled.png';
@@ -101,15 +98,13 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
 
     const { accessToken } = authService.login(user);
 
-    const postDto: CreatePostDto = {
-      post: {
-        title: fakerKO.lorem.sentence(),
-        content: fakerKO.lorem.paragraphs(),
-      },
+    const postDto: PostDto = {
+      title: fakerKO.lorem.sentence(),
+      content: fakerKO.lorem.paragraphs(),
     };
 
     const imageFilePath = 'Untitled.png';
@@ -145,7 +140,7 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
     const postDto: PostDto = {
       title: fakerKO.lorem.sentence(),
       content: fakerKO.lorem.paragraphs(),
@@ -161,7 +156,7 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
     const postDto: PostDto = {
       title: fakerKO.lorem.sentence(),
       content: fakerKO.lorem.paragraphs(),
@@ -189,7 +184,7 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
     const postDto: PostDto = {
       title: fakerKO.lorem.sentence(),
       content: fakerKO.lorem.paragraphs(),
@@ -210,7 +205,7 @@ describe('Post e2e', () => {
       password: fakerKO.string.alphanumeric(10),
       name: fakerKO.person.fullName(),
     };
-    const user = await userService.create(dto);
+    const user = await userService.signup(dto);
     const { accessToken } = authService.login(user);
     const postDto: PostDto = {
       title: fakerKO.lorem.sentence(),
@@ -221,17 +216,14 @@ describe('Post e2e', () => {
     const newContent = 'newContent';
     const imageFilePath = 'Untitled.png';
     const imageData = fs.readFileSync(imageFilePath);
-    const updatePostDto: UpdatePostDto = {
-      post: {
-        title: newTitle,
-        content: newContent,
-      },
-    } as UpdatePostDto;
-
+    const updateDto: PostDto = {
+      title: newTitle,
+      content: newContent,
+    };
     return request(app.getHttpServer())
       .patch('/posts/' + post.postId)
       .set({ Authorization: `Bearer ${accessToken}` })
-      .field('post', JSON.stringify(updatePostDto))
+      .field('post', JSON.stringify(updateDto))
       .attach('img', imageData, imageFilePath)
       .expect(HttpStatus.OK)
       .expect(({ body }) => {

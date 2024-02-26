@@ -1,15 +1,25 @@
-import { PartialType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { User } from '../../user/entities/user.entity';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, Type, plainToInstance } from 'class-transformer';
+import { IsNotEmpty, IsString, Length, ValidateNested } from 'class-validator';
 
-export type PostDto = {
+export class PostDto {
+  @IsNotEmpty()
+  @IsString()
+  @Length(2, 150)
   title: string;
-  content: string;
-};
 
-export class CreatePostDto extends PartialType(User) {
-  @Transform(({ value }) => {
-    return JSON.parse(value).post;
-  })
+  @IsNotEmpty()
+  @Length(5)
+  @IsString()
+  content: string;
+}
+
+export class CreatePostDto {
+  @Transform(({ value }) => plainToInstance(PostDto, JSON.parse(value)))
+  @Type(() => PostDto)
+  @ValidateNested()
   post: PostDto;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary', required: false })
+  img?: Express.Multer.File;
 }

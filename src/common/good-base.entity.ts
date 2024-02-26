@@ -9,5 +9,5 @@ export class GoodBaseEntity<T> {
   @UpdateDateColumn()
   updatedAt: Date;
   @DeleteDateColumn()
-  deleteAt: Date;
+  deleteAt?: Date;
 }

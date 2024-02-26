@@ -26,7 +26,6 @@ export class User extends GoodBaseEntity<User> {
   async signup({ password, identififer, name }: CreateUserDto) {
     const hash = await bcrypt.hash(password, SALT_OR_ROUNDS);
 
-    // TODO: 암호화해서 받기
     this.password = hash;
     this.identififer = identififer;
     this.name = name;

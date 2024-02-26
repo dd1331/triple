@@ -20,7 +20,7 @@ export class Post extends GoodBaseEntity<Post> {
   content: string;
 
   @Column({ nullable: true })
-  img: string;
+  img?: string;
 
   @Column({ name: 'poster_id' })
   posterId: number;

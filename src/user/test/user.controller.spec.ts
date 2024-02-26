@@ -41,6 +41,7 @@ describe('User e2e', () => {
     const dto: CreateUserDto = {
       identififer: fakerKO.string.alphanumeric(10),
       password: fakerKO.string.alphanumeric(10),
+      name: 'test',
     };
     return request(app.getHttpServer())
       .post('/users')
@@ -53,8 +54,9 @@ describe('User e2e', () => {
     const dto: CreateUserDto = {
       identififer: fakerKO.string.alphanumeric(10),
       password: fakerKO.string.alphanumeric(10),
+      name: 'tes',
     };
-    await userService.create(dto);
+    await userService.signup(dto);
 
     return request(app.getHttpServer())
       .post('/users')

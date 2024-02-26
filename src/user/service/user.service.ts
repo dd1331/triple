@@ -9,7 +9,7 @@ export class UserService {
     @Inject(USER_REPOSITORY)
     private readonly userRepo: UserRepository,
   ) {}
-  async create(dto: CreateUserDto) {
+  async signup(dto: CreateUserDto) {
     const exist = await this.userRepo.existsBy({
       identififer: dto.identififer,
     });

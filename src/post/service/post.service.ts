@@ -54,7 +54,7 @@ export class PostService {
 
     const isMine = post.posterId !== posterId;
     if (isMine)
-      throw new UnauthorizedException('본인의 게시글만 삭제가능합니다');
+      throw new UnauthorizedException('본인의 게시글만 수정가능합니다');
 
     const url = file ? await this.fileService.upload(file) : post.img || null;
     post.update({ ...rest, img: url });

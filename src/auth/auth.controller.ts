@@ -1,18 +1,58 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
+import { LoginResponseDto } from './dto/login.response.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
+@ApiTags('auth')
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  // TODO: 타입지정
-  create(@Request() { user }: { user: User }) {
-    return this.authService.login(user);
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '로그인' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '로그인 성공',
+    type: LoginResponseDto,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: '로그인 실패' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '유효하지 않은 데이터',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        identififer: { type: 'string' },
+        password: { type: 'string' },
+      },
+    },
+  })
+  login(@Request() { user }: { user: User }) {
+    const res = this.authService.login(user);
+
+    return new LoginResponseDto(res);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -8,6 +8,7 @@ describe('createUserDto', () => {
     const plain: CreateUserDto = {
       identififer: fakerKO.string.alphanumeric(15),
       password: fakerKO.string.alphanumeric(20),
+      name: 'test',
     };
 
     const dto = plainToClass(CreateUserDto, plain);
@@ -21,6 +22,7 @@ describe('createUserDto', () => {
     const plain: CreateUserDto = {
       identififer: fakerKO.string.alphanumeric(16),
       password: fakerKO.string.alphanumeric(21),
+      name: 'test',
     };
 
     const dto = plainToClass(CreateUserDto, plain);
@@ -34,6 +36,7 @@ describe('createUserDto', () => {
     const plain: CreateUserDto = {
       identififer: undefined,
       password: undefined,
+      name: 'test',
     };
 
     const dto = plainToClass(CreateUserDto, plain);
