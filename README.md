@@ -44,3 +44,7 @@ npm run test:watch
 ### swagger plugin https://docs.nestjs.com/openapi/cli-plugin
 
 - 스웨거 플러그인을 추가하여 .dto 파일 전체에 자동으로 프로퍼티 설정되게함. 필요시 커스텀 가능
+
+### 유효성체크/응답
+
+- 모든 유효성체크와 응답값 변경은 dto에서 행해지기 때문에 서비스/도메인 로직은 순수하게 만듦
