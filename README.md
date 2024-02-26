@@ -1,73 +1,31 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 특이사항
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### FileService
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- fileService 인터페이스를 활용하여 postService에 구현체 주입
+- localFileService는 로컬에 파일저장하는 역할을 하며 추후 AWS S3 등의 외부 서비스 활용시 해당 구현체를 Postmoudle의 provider에 갈아끼워 간단하게 구현체 변경할 수 있고 fileService의 upload 메소드에만 의존하기 때문에 postService는 변경에 영향을 받지 않는다.
 
-## Description
+### PostRepository
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- postRespository 인터페이스를 활용하여 postService에 구현체 주입
+- typePostRepository 구현체를 주입하여 사용중이며 추구 orm을 다른 것으로 변경시 postRespository 인터페이스를 따르는 구현체를 새로 생성하여 주입시 postService는 변경에 영향을 받지 않는다
 
-## Installation
+### GoodBaseEntity
 
-```bash
-$ npm install
-```
+- Date관련 컬럼과 생성자로 객체생성 기능을 상속을 통해 중복구현 방지
 
-## Running the app
+### GoodBaseDto
 
-```bash
-# development
-$ npm run start
+- 생성자로 객체생성 기능을 상속하여 간단하게 응답객체 생성
 
-# watch mode
-$ npm run start:dev
+### 테스트코드
 
-# production mode
-$ npm run start:prod
-```
+- 성공/실패케이스에 대한 e2e 테스트와 간단한 dto 유닛테스트
 
-## Test
+### ExceptionFilter
 
-```bash
-# unit tests
-$ npm run test
+- AOP 관점에서 모든에러를 한곳에서 처리할 수 있도록 하고 httpException과 기타 예외를 구분하여 다른 처리(웹훅전송 등)를 할 수 있도록 분리
 
-# e2e tests
-$ npm run test:e2e
+### swagger plugin https://docs.nestjs.com/openapi/cli-plugin
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- 스웨거 플러그인을 추가하여 .dto 파일 전체에 자동으로 프로퍼티 설정되게함. 필요시 커스텀 가능
