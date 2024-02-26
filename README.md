@@ -3,7 +3,7 @@
 ### FileService
 
 - fileService 인터페이스를 활용하여 postService에 구현체 주입
-- localFileService는 로컬에 파일저장하는 역할을 하며 추후 AWS S3 등의 외부 서비스 활용시 해당 구현체를 Postmoudle의 provider에 갈아끼워 간단하게 구현체 변경할 수 있고 fileService의 upload 메소드에만 의존하기 때문에 postService는 변경에 영향을 받지 않는다.
+- localFileService는 로컬에 파일저장하는 역할을 하며 추후 AWS S3 등의 외부 서비스 활용시 해당 구현체를 Postmoudle의 provider에 갈아끼워 간단하게 구현체를 변경할 수 있고 fileService의 upload 메소드에만 의존하기 때문에 postService는 변경에 영향을 받지 않는다.
 
 ### PostRepository
 
