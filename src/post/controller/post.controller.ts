@@ -20,7 +20,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { ReqUser } from '../../user/user.decorator';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { CreatePostResponseDto } from '../dto/create-post.response.dto';

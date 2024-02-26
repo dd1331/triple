@@ -2,10 +2,11 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from '../user/service/user.service';
-import { AuthModule } from './auth.module';
-import { AuthService } from './auth.service';
+import { ormModuleOption } from '../../common/orm-module-option';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { UserService } from '../../user/service/user.service';
+import { AuthModule } from '../auth.module';
+import { AuthService } from '../service/auth.service';
 
 describe('Auth e2e', () => {
   let app: INestApplication;
@@ -13,21 +14,7 @@ describe('Auth e2e', () => {
   let authService: AuthService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        // TODO: 합치기
-        TypeOrmModule.forRoot({
-          type: 'mysql',
-          host: 'localhost',
-          port: 3306,
-          username: 'root',
-          password: '',
-          database: 'gombeul_css',
-          dropSchema: true,
-          autoLoadEntities: true,
-          synchronize: true,
-        }),
-        AuthModule,
-      ],
+      imports: [TypeOrmModule.forRoot(ormModuleOption), AuthModule],
     }).compile();
 
     userService = module.get<UserService>(UserService);

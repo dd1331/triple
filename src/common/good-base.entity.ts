@@ -1,6 +1,6 @@
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
 
-export class GoodBaseEntity<T> {
+export abstract class GoodBaseEntity<T> {
   constructor(dto?: Partial<T>) {
     Object.assign(this, dto);
   }

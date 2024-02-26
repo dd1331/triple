@@ -7,8 +7,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Strategy } from 'passport-local';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dto/login.dto';
+import { AuthService } from '../service/auth.service';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {

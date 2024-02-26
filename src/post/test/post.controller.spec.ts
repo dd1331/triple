@@ -11,7 +11,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as request from 'supertest';
 import { AuthModule } from '../../auth/auth.module';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../auth/service/auth.service';
+import { ormModuleOption } from '../../common/orm-module-option';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
 import { UserService } from '../../user/service/user.service';
 import { PostDto } from '../dto/create-post.dto';
@@ -27,17 +28,7 @@ describe('Post e2e', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         // TODO: 합치기
-        TypeOrmModule.forRoot({
-          type: 'mysql',
-          host: 'localhost',
-          port: 3306,
-          username: 'root',
-          password: '',
-          database: 'gombeul_css',
-          dropSchema: true,
-          autoLoadEntities: true,
-          synchronize: true,
-        }),
+        TypeOrmModule.forRoot(ormModuleOption),
         AuthModule,
         PostModule,
       ],
